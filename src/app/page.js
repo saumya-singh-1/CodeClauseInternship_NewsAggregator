@@ -19,7 +19,7 @@ export default function Home() {
         ? `https://newsapi.org/v2/everything?q=${query}&apiKey=${apiKey}`
         : `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${apiKey}`;
 
-      const res = await fetch(url);
+      const res = await fetch("/api/news");
       const data = await res.json();
       setArticles(data.articles || []);
     } catch (err) {
