@@ -6,24 +6,39 @@ import { useState, useEffect } from "react";
 export default function Home() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [query, setQuery] = useState(""); // search input
   const [category, setCategory] = useState("general"); // default category
-
-  const apiKey = process.env.NEXT_PUBLIC_NEWS_API_KEY; // ✅ use NEXT_PUBLIC_ for client-side
 
   // 🔹 Fetch news function
   const fetchNews = async () => {
     setLoading(true);
+    setError(null);
     try {
-      const url = query
-        ? `https://newsapi.org/v2/everything?q=${query}&apiKey=${apiKey}`
-        : `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${apiKey}`;
-
-      const res = await fetch("/api/news");
+      // Build query parameters
+      const params = new URLSearchParams();
+      if (query) {
+        params.append('q', query);
+      } else {
+        params.append('category', category);
+      }
+      
+      const res = await fetch(`/api/news?${params.toString()}`);
+      
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      
       const data = await res.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
       setArticles(data.articles || []);
     } catch (err) {
       console.error("Error fetching news:", err);
+      setError(err.message);
       setArticles([]);
     }
     setLoading(false);
@@ -36,7 +51,14 @@ export default function Home() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    fetchNews();
+    if (query.trim()) {
+      fetchNews();
+    }
+  };
+
+  const handleCategoryChange = (newCategory) => {
+    setCategory(newCategory);
+    setQuery(""); // clear search when category is selected
   };
 
   return (
@@ -61,7 +83,8 @@ export default function Home() {
           />
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            disabled={!query.trim()}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             Search
           </button>
@@ -72,14 +95,11 @@ export default function Home() {
           {["general", "business", "sports", "technology", "health", "entertainment"].map((cat) => (
             <button
               key={cat}
-              onClick={() => {
-                setCategory(cat);
-                setQuery(""); // clear search when category is selected
-              }}
-              className={`px-3 py-1 rounded-md ${
+              onClick={() => handleCategoryChange(cat)}
+              className={`px-3 py-1 rounded-md transition-colors ${
                 category === cat
                   ? "bg-blue-600 text-white"
-                  : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+                  : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
               }`}
             >
               {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -87,50 +107,68 @@ export default function Home() {
           ))}
         </div>
 
+        {/* Error Display */}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            <strong>Error:</strong> {error}
+          </div>
+        )}
+
         {/* News Articles */}
         {loading ? (
-          <p>Loading news...</p>
+          <div className="flex justify-center items-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <span className="ml-2">Loading news...</span>
+          </div>
         ) : articles.length > 0 ? (
           <div className="space-y-6">
             {articles.map((article, index) => (
               <article
-                key={index}
-                className="p-4 bg-white dark:bg-gray-800 shadow rounded-lg flex gap-4"
+                key={`${article.url || index}`}
+                className="p-4 bg-white dark:bg-gray-800 shadow rounded-lg flex gap-4 hover:shadow-lg transition-shadow"
               >
                 {/* Article Image */}
                 {article.urlToImage ? (
                   <img
                     src={article.urlToImage}
-                    alt={article.title}
+                    alt={article.title || "News article"}
                     className="w-32 h-20 object-cover rounded-md"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
                   />
-                ) : (
-                  <div className="w-32 h-20 bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-xs text-gray-500 rounded-md">
-                    No Image
-                  </div>
-                )}
+                ) : null}
+                <div className="w-32 h-20 bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-xs text-gray-500 rounded-md">
+                  No Image
+                </div>
 
                 {/* Article Text */}
-                <div>
-                  <h3 className="text-lg font-bold">{article.title}</h3>
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold">{article.title || "No title available"}</h3>
                   <p className="text-gray-700 dark:text-gray-300 mt-2">
                     {article.description || "No description available."}
                   </p>
-                  <a
-                    href={article.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline mt-2 block"
-                  >
-                    Read more
-                  </a>
+                  {article.url && (
+                    <a
+                      href={article.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline mt-2 block inline-block"
+                    >
+                      Read more →
+                    </a>
+                  )}
                 </div>
               </article>
             ))}
           </div>
-        ) : (
-          <p>No news found.</p>
-        )}
+        ) : !error ? (
+          <div className="text-center py-8 text-gray-500">
+            <p>No news found for "{query || category}".</p>
+            <p className="text-sm mt-2">Try a different search term or category.</p>
+          </div>
+        ) : null}
       </main>
 
       {/* Footer */}
