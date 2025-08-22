@@ -1,7 +1,8 @@
 // src/app/page.js
 "use client"; // ✅ Required for using state & events in Next.js App Router
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 
 export default function Home() {
   const [articles, setArticles] = useState([]);
@@ -11,7 +12,7 @@ export default function Home() {
   const [category, setCategory] = useState("general"); // default category
 
   // 🔹 Fetch news function
-  const fetchNews = async () => {
+  const fetchNews = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -42,12 +43,12 @@ export default function Home() {
       setArticles([]);
     }
     setLoading(false);
-  };
+  }, [query, category]);
 
   // 🔹 Load news when category or query changes
   useEffect(() => {
     fetchNews();
-  }, [category]);
+  }, [fetchNews]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -129,9 +130,11 @@ export default function Home() {
               >
                 {/* Article Image */}
                 {article.urlToImage ? (
-                  <img
+                  <Image
                     src={article.urlToImage}
                     alt={article.title || "News article"}
+                    width={128}
+                    height={80}
                     className="w-32 h-20 object-cover rounded-md"
                     onError={(e) => {
                       e.target.style.display = 'none';
@@ -165,7 +168,7 @@ export default function Home() {
           </div>
         ) : !error ? (
           <div className="text-center py-8 text-gray-500">
-            <p>No news found for "{query || category}".</p>
+            <p>No news found for &quot;{query || category}&quot;.</p>
             <p className="text-sm mt-2">Try a different search term or category.</p>
           </div>
         ) : null}
