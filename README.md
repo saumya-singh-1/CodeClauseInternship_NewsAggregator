@@ -1,113 +1,65 @@
-# News Aggregator
+# 📰 News Aggregator
 
-A modern, responsive news aggregator built with Next.js 15, React 19, and Tailwind CSS v4. Stay updated with the latest headlines from around the world.
+This project was developed as part of my **CodeClause Internship**.  
+It is a responsive **News Aggregator Web Application** built with **Next.js, Tailwind CSS, and NewsAPI**.  
+The app allows users to browse the latest headlines, filter by categories, and read articles directly from trusted sources.
 
-## Features
+---
 
-- 📰 **Real-time News**: Get the latest headlines from NewsAPI
-- 🔍 **Smart Search**: Search for specific news topics
-- 📂 **Category Filtering**: Browse news by categories (General, Business, Sports, Technology, Health, Entertainment)
-- 🌙 **Dark Mode**: Automatic dark/light mode based on system preference
-- 📱 **Responsive Design**: Works perfectly on all devices
-- ⚡ **Fast Performance**: Built with Next.js App Router for optimal performance
+## 📸 Screenshots
 
-## Tech Stack
+### Homepage
+![Homepage Screenshot](./screenshots/newsaggregator-ss1.jpg)
 
-- **Frontend**: Next.js 15, React 19
-- **Styling**: Tailwind CSS v4
-- **API**: NewsAPI.org integration
-- **Deployment**: Vercel ready
+### Category Example
+![Category Screenshot](./screenshots/newsaggregator-ss2.jpg)
 
-## Getting Started
+### Footer 
+![Footer at bottom screenshot](./screenshots/newsaggregator-ss3.jpg)
 
-### Prerequisites
+### Mobile View
+![Mobile view screenshot](./screenshots/newsaggregator-ss4.jpg)
 
-- Node.js 18+ 
-- npm or yarn
+### Tablet View
+![Tablet view screenshot](./screenshots/newsaggregator-ss5.jpg)
 
-### Installation
+---
 
-1. Clone the repository:
-```bash
-git clone <your-repo-url>
-cd news_aggregator
-```
+## 🚀 Live Demo
 
-2. Install dependencies:
-```bash
-npm install
-```
+🔗 [View Live Project](https://news-aggrega.vercel.app/)  
+🔗 [GitHub Repository](https://github.com/saumya-singh-1/CodeClauseInternship_NewsAggregator)
 
-3. Create environment variables:
-Create a `.env.local` file in the root directory:
-```env
-NEWS_API_KEY=your_news_api_key_here
-```
+---
 
-4. Get your NewsAPI key:
-- Visit [NewsAPI.org](https://newsapi.org/)
-- Sign up for a free account
-- Copy your API key
-- Paste it in the `.env.local` file
+## ✨ Features
 
-5. Run the development server:
-```bash
-npm run dev
-```
+- Browse top news headlines
+- Filter articles by categories (Business, Sports, Technology, Health, Entertainment, etc.)
+- Mobile-friendly responsive UI
+- Light/Dark mode ready
+- Fetches real-time news using [NewsAPI](https://newsapi.org)
 
-6. Open [http://localhost:3000](http://localhost:3000) in your browser
+---
 
-## Available Scripts
+## 🛠️ Built With
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
+- [Next.js](https://nextjs.org) (App Router)
+- [Tailwind CSS](https://tailwindcss.com)
+- [NewsAPI](https://newsapi.org)
 
-## Project Structure
+---
 
-```
-news_aggregator/
-├── src/
-│   └── app/
-│       ├── api/
-│       │   └── news/
-│       │       └── route.js      # News API endpoint
-│       ├── globals.css           # Global styles
-│       ├── layout.js             # Root layout
-│       └── page.js               # Home page
-├── public/                       # Static assets
-├── .env.local                    # Environment variables
-└── package.json                  # Dependencies
-```
+## 👨‍💻 Author
 
-## API Endpoints
+- **Saumya Singh**  
+  GitHub: [@saumya-singh-1](https://github.com/saumya-singh-1)  
+  LinkedIn: [@saumyasingh](www.linkedin.com/in/saumya-singh-946b63321/)  
 
-- `GET /api/news` - Fetch news articles
-  - Query params:
-    - `q` - Search query
-    - `category` - News category (general, business, sports, etc.)
+---
 
-## Deployment
+## 🎯 Internship Note
 
-This project is ready for deployment on Vercel:
+This project was built as part of the **CodeClause Internship Program (2025)**.  
+It helped me strengthen my skills in **React/Next.js, API integration, and responsive web design**.
 
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Add your `NEWS_API_KEY` environment variable in Vercel
-4. Deploy!
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## Support
-
-If you encounter any issues or have questions, please open an issue on GitHub.
