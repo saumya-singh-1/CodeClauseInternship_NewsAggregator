@@ -73,14 +73,14 @@ export default function Home() {
       <main className="p-6 max-w-5xl mx-auto">
         <h2 className="text-xl font-semibold mb-4">Top Headlines</h2>
 
-        {/* 🔹 Search Bar */}
+        {/* 🔹 Search Bar
         <form onSubmit={handleSearch} className="flex gap-2 mb-4">
           <input
             type="text"
             placeholder="Search news..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="flex-1 p-2 border rounded-md text-black"
+            className="flex-1 p-2 border rounded-md text-white"
           />
           <button
             type="submit"
@@ -89,7 +89,7 @@ export default function Home() {
           >
             Search
           </button>
-        </form>
+        </form> */}
 
         {/* 🔹 Categories */}
         <div className="flex gap-3 mb-6 flex-wrap">
