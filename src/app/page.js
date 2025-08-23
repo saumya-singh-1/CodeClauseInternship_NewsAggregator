@@ -141,11 +141,11 @@ export default function Home() {
                       e.target.nextSibling.style.display = 'flex';
                     }}
                   />
-                ) : null}
+                ) : (
                 <div className="w-32 h-20 bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-xs text-gray-500 rounded-md">
                   No Image
                 </div>
-
+                )}
                 {/* Article Text */}
                 <div className="flex-1">
                   <h3 className="text-lg font-bold">{article.title || "No title available"}</h3>
